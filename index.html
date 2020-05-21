@@ -14,6 +14,8 @@
   <body>
     <h1>Hi Tessa!</h1>
     <p>The table below gets updated by JavaScript each time new data arrives over the WebSocket</p>
+
+    <!-- This is the table we will be updating -->
     <table>
       <thead>
         <tr>
@@ -26,9 +28,12 @@
         </tr>
       </thead>
       <tbody>
+        <!-- Notice that the id here matches the id in `document.getElementById` -->
         <tr id="row-where-the-data-goes"></tr>
       </tbody>
     </table>
+
+    <!-- This is a script tag where we can write JavaScript -->
     <script>
       // Open a websocket connection (JavaScript makes this super easy)
       const ws = new WebSocket('ws://0.0.0.0:8080/ws')
