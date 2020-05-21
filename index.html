@@ -3,24 +3,50 @@
   <head>
     <meta charset="utf-8">
     <title>Hello worl d</title>
+    <style media="screen">
+      /* We can put styles in here */
+      body {
+        background-color: #F9FAF5;
+        font-family: sans-serif;
+      }
+    </style>
   </head>
   <body>
+    <h1>Hi Tessa!</h1>
+    <p>The table below gets updated by JavaScript each time new data arrives over the WebSocket</p>
     <table>
-
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>Month</th>
+          <th>Day</th>
+          <th>Hour</th>
+          <th>Minute</th>
+          <th>Second</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="row-where-the-data-goes"></tr>
+      </tbody>
     </table>
     <script>
+      // Open a websocket connection (JavaScript makes this super easy)
       const ws = new WebSocket('ws://0.0.0.0:8080/ws')
-      ws.onopen = function (event) {
-        console.log('open event', event);
-      }
-      ws.onclose = function (event) {
-        console.log('close event', event);
-      }
+
+      // Tell the websocket connection what to do when it receives a message
       ws.onmessage = function (event) {
-        console.log('message event', event);
-      }
-      ws.onerror = function (event) {
-        console.log('error event', event);
+        // This parses the message coming over the websocket as a date, but we could parse it as JSON
+        const date = new Date(event.data);
+
+        // Here we are telling the row-where-the-data-goes what HTML should appear inside
+        document.getElementById('row-where-the-data-goes').innerHTML = `
+          <td>${date.getFullYear()}</td>
+          <td>${date.getMonth()}</td>
+          <td>${date.getDay()}</td>
+          <td>${date.getHours()}</td>
+          <td>${date.getMinutes()}</td>
+          <td>${date.getSeconds()}</td>
+        `
       }
     </script>
   </body>
