@@ -9,7 +9,7 @@ class Server:
         self.app = web.Application()  # Create the "app" object
         self.app.add_routes([
             web.get('/ws', self.websocket_handler),  # Tells the server how to handle weboscket connection requests
-            web.static('/', './'),  # Tells the server how to handle static files
+            web.get('/', self.static_file_handler),  # Tells the server to serve index.html if someone arrives at '/'
         ])
         self.app.on_startup.append(self._start_background_tasks)  # Create a "task" to start when the server starts
         self.app.on_cleanup.append(self._cleanup_background_tasks)  # Create a "task" to run when the server finishes
@@ -17,6 +17,9 @@ class Server:
 
     def run(self):
         web.run_app(self.app)
+
+    async def static_file_handler(self, request):
+        return web.FileResponse('./index.html')
 
     async def websocket_handler(self, request):
         ws = web.WebSocketResponse()
@@ -50,7 +53,7 @@ class Server:
         # Create the background job
         some_background_job = SomeBackgroundJob(self._handle_new_data)
         # Create a "Task" to run in the background that runs the connector
-        app['connector_task'] = asyncio.create_task(some_background_job.run())
+        app['connector_task'] = asyncio.ensure_future(some_background_job.run())
 
     async def _cleanup_background_tasks(self, app):
         # We are shutting down the app, so we should cancel the task
