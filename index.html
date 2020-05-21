@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Hello worl d</title>
+  </head>
+  <body>
+    <table>
+
+    </table>
+    <script>
+      const ws = new WebSocket('ws://0.0.0.0:8080/ws')
+      ws.onopen = function (event) {
+        console.log('open event', event);
+      }
+      ws.onclose = function (event) {
+        console.log('close event', event);
+      }
+      ws.onmessage = function (event) {
+        console.log('message event', event);
+      }
+      ws.onerror = function (event) {
+        console.log('error event', event);
+      }
+    </script>
+  </body>
+</html>
