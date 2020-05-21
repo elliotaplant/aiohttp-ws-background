@@ -1,7 +1,7 @@
 import asyncio
 import aiohttp
 from aiohttp import web
-from dummy_connector import Connector
+from background_job import SomeBackgroundJob
 
 
 class Server:
@@ -47,10 +47,10 @@ class Server:
             await ws.send_str(str(new_data))
 
     async def _start_background_tasks(self, app):
-        # Create the connector
-        c = Connector(self._handle_new_data)
+        # Create the background job
+        some_background_job = SomeBackgroundJob(self._handle_new_data)
         # Create a "Task" to run in the background that runs the connector
-        app['connector_task'] = asyncio.create_task(c.start_exchanges())
+        app['connector_task'] = asyncio.create_task(some_background_job.run())
 
     async def _cleanup_background_tasks(self, app):
         # We are shutting down the app, so we should cancel the task
